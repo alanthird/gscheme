@@ -2,8 +2,8 @@ package evaluator
 
 import (
 	"fmt"
-	"github.com/alanthird/gscheme/types"
 	"github.com/alanthird/gscheme/environment"
+	"github.com/alanthird/gscheme/types"
 )
 
 func Eval(env *environment.Environment, f types.SchemeType) (types.SchemeType, error) {
@@ -22,14 +22,14 @@ func Eval(env *environment.Environment, f types.SchemeType) (types.SchemeType, e
 		if !ok {
 			return nil, fmt.Errorf("EVAL: Not pair: %s", cdr)
 		}
-		
+
 		return Apply(env, car, cdrAgain)
 	}
 
 	if types.IsSymbol(f) {
 		return environment.Get(env, f.(*types.Symbol))
 	}
-	
+
 	return f, nil
 }
 
@@ -37,7 +37,7 @@ func Apply(env *environment.Environment, f types.SchemeType, args types.SchemeTy
 	if isSpecialForm(f) {
 		return applySpecialForm(env, f.(*types.Symbol).Value, args)
 	}
-	
+
 	fn, err := Eval(env, f)
 	if err != nil {
 		return nil, fmt.Errorf("%s\nAPPLY: eval: %s", err, f)
@@ -49,8 +49,8 @@ func Apply(env *environment.Environment, f types.SchemeType, args types.SchemeTy
 	}
 
 	//fmt.Printf("%s\n", args)
-	
-	if bfn, ok := fn.(*types.Builtin) ; ok {
+
+	if bfn, ok := fn.(*types.Builtin); ok {
 		if r, err := bfn.Fn(env, args); err != nil {
 			return nil, fmt.Errorf("%s\nAPPLY: builtin %s", err, f.(*types.Symbol).Value)
 		} else {
@@ -58,14 +58,14 @@ func Apply(env *environment.Environment, f types.SchemeType, args types.SchemeTy
 		}
 	}
 
-	if sfn, ok := fn.(*types.SFunction) ; ok {
+	if sfn, ok := fn.(*types.SFunction); ok {
 		sfnEnv := environment.New(sfn.Env.(*environment.Environment))
 		err = environment.AddArgs(sfnEnv, sfn.Args, args)
 		if err != nil {
 			return nil, err
 		}
 
-		if r, err := begin(sfnEnv, sfn.Function) ; err != nil {
+		if r, err := begin(sfnEnv, sfn.Function); err != nil {
 			return nil, fmt.Errorf("%s\nAPPLY: function %s", err, f.(*types.Symbol).Value)
 		} else {
 			return r, nil
@@ -83,7 +83,7 @@ func evalArgs(env *environment.Environment, args types.SchemeType) (types.Scheme
 	if err != nil {
 		return nil, err
 	}
-	
+
 	car, err := Eval(env, arg)
 	if err != nil {
 		return nil, err
@@ -103,12 +103,12 @@ func evalArgs(env *environment.Environment, args types.SchemeType) (types.Scheme
 }
 
 func listToArray(env *environment.Environment, list *types.Pair) (argList []types.SchemeType, err error) {
-	for a := list ; a != nil ; {
+	for a := list; a != nil; {
 		car, err := types.Car(a)
 		if err != nil {
 			return nil, err
 		}
-		
+
 		r, err := Eval(env, car)
 		if err != nil {
 			return nil, err

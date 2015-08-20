@@ -44,7 +44,7 @@ func define(env *environment.Environment, args types.SchemeType) error {
 	if err != nil {
 		return err
 	}
-	
+
 	environment.Define(env, name.(*types.Symbol), evaldValue)
 	return nil
 }
@@ -75,15 +75,21 @@ func if_s(env *environment.Environment, a types.SchemeType) (types.SchemeType, e
 	}
 
 	var toEval types.SchemeType
-	
+
 	if b.(*types.Bool).Value {
 		toEval, err = types.Cadr(a)
-		if err != nil { return nil, err }
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		temp, err := types.Cdr(a)
-		if err != nil { return nil, err }
+		if err != nil {
+			return nil, err
+		}
 		toEval, err = types.Cadr(temp)
-		if err != nil { return nil, err }
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return Eval(env, toEval)

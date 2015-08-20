@@ -1,16 +1,16 @@
 package parser
 
 import (
-	"io"
 	"fmt"
+	"github.com/alanthird/gscheme/types"
+	"io"
 	"strconv"
 	"unicode/utf8"
-	"github.com/alanthird/gscheme/types"
 )
 
 type parseError struct {
 	message string
-	token string
+	token   string
 }
 
 func (e *parseError) Error() string {
@@ -30,15 +30,15 @@ func list(t *tokenizer) (types.SchemeType, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return types.Cons(car, cdr), nil
 }
 
 func parseToken(t *tokenizer) (types.SchemeType, bool, error) {
 	var token string
 	var err error
-	
-	if token, err = t.nextToken() ; err != nil {
+
+	if token, err = t.nextToken(); err != nil {
 		return nil, false, err
 	}
 
@@ -49,7 +49,7 @@ func parseToken(t *tokenizer) (types.SchemeType, bool, error) {
 		}
 		return types.Cons(&types.Symbol{"quote"}, types.Cons(cadr, nil)), false, nil
 	}
-	
+
 	if isListEnd(token) {
 		return nil, true, nil
 	}
@@ -57,7 +57,7 @@ func parseToken(t *tokenizer) (types.SchemeType, bool, error) {
 		r, err := list(t)
 		return r, false, err
 	}
-	
+
 	if isSymbol(token) {
 		return &types.Symbol{token}, false, nil
 	}
@@ -79,7 +79,7 @@ func parseToken(t *tokenizer) (types.SchemeType, bool, error) {
 	}
 
 	switch token {
-	case "#t": 
+	case "#t":
 		return &types.Bool{true}, false, nil
 	case "#f":
 		return &types.Bool{false}, false, nil
@@ -129,5 +129,5 @@ func makeString(token string) (*types.String, error) {
 		return nil, &parseError{"Unterminated string", token}
 	}
 
-	return &types.String{token[1:len(token) - 1]}, nil
+	return &types.String{token[1 : len(token)-1]}, nil
 }

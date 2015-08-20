@@ -20,14 +20,12 @@ func buildEnvironment() (env *e.Environment) {
 	defFunc("cons", cons)
 	defFunc("car", car)
 	defFunc("cdr", cdr)
-	
-	
+
 	/* Arithmetic */
 	defFunc("+", add)
 	defFunc("-", sub)
 	defFunc("=", equal_Number)
 
-	
 	/* General */
 	defFunc("eq?", eq)
 	defFunc("eqv?", eqv)

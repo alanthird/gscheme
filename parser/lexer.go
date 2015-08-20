@@ -1,9 +1,9 @@
 package parser
 
 import (
-	"io"
 	"bufio"
 	"bytes"
+	"io"
 )
 
 type tokenizer struct {
@@ -28,7 +28,7 @@ func (t *tokenizer) rewind() {
 }
 
 func (t *tokenizer) readWhitespace() {
-	for c, err := t.read() ; isWhitespace(c) ; {
+	for c, err := t.read(); isWhitespace(c); {
 		if err != nil {
 			return
 		}
@@ -41,8 +41,8 @@ func (t *tokenizer) readString() string {
 	var b bytes.Buffer
 	var c rune
 	var err error
-	
-	for c, err = t.read() ; err == nil && !isSeparator(c) ; c, err = t.read() {
+
+	for c, err = t.read(); err == nil && !isSeparator(c); c, err = t.read() {
 		b.WriteRune(c)
 	}
 
@@ -59,7 +59,7 @@ func (t *tokenizer) readQuotedString() string {
 	// the first rune *must* be a double quote or we wouldn't be here
 	c, _ := t.read()
 	b.WriteRune(c)
-	
+
 	for {
 		c, err := t.read()
 		if err != nil {

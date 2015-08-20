@@ -30,13 +30,13 @@ func TestPair(t *testing.T) {
 
 	car, _ := Car(p)
 	cdr, _ := Cdr(p)
-	
+
 	q = Cons(car, cdr)
 
 	if !Eqv(p, q) {
 		t.Error("Pairs with eq contents not eqv")
 	}
-	
+
 	if !IsPair(p) {
 		t.Error("isPair gives false with Pair")
 	}

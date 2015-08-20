@@ -23,4 +23,3 @@ func IsNumber(n SchemeType) (ok bool) {
 	_, ok = n.(*Number)
 	return
 }
-

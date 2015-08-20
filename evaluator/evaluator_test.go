@@ -57,7 +57,7 @@ func TestDefine(t *testing.T) {
 	if _, err := Eval(env, f); err != nil {
 		t.Error("Evaluating (define answer 42) failed:", err)
 	}
-	
+
 	if a, err := environment.Get(env, &types.Symbol{"answer"}); err != nil {
 		t.Error("'Get'ting 'answer' caused an error: ", err)
 	} else if !types.Eqv(a, &types.Number{42}) {
@@ -106,7 +106,7 @@ func TestLambda(t *testing.T) {
 	} else if !types.IsSFunction(a) {
 		t.Error("Evaluating lambda didn't return an SFunction:", a)
 	}
-	
+
 	f, _ = parser.Parse(strings.NewReader("(define add1 (lambda (n) (+ 1 n)))"))
 	if _, err := Eval(env, f); err != nil {
 		t.Error("Evaluating define lambda failed:", err)
@@ -117,7 +117,7 @@ func TestLambda(t *testing.T) {
 	} else if !types.IsSFunction(a) {
 		t.Error("add1 is not an SFunction:", a)
 	}
-	
+
 	f, _ = parser.Parse(strings.NewReader("(add1 1)"))
 	if a, err := Eval(env, f); err != nil {
 		t.Error("Evaluating (add1 1) failed:", err)
@@ -133,12 +133,12 @@ func TestScoping(t *testing.T) {
 	environment.Define(env, &types.Symbol{"+"}, &types.Builtin{add})
 
 	funcString := "(begin (define a 0) (define get-num ((lambda (a b) (define c 4) (lambda (b) (+ a b c))) 1 2)))"
-	
+
 	f, err := parser.Parse(strings.NewReader(funcString))
 	if err != nil {
 		t.Error("Parsing funcString failed:", err)
 	}
-	
+
 	if _, err := Eval(env, f); err != nil {
 		t.Error("Evaluating funcString failed:", err)
 	}
@@ -162,18 +162,18 @@ func TestFibonacci(t *testing.T) {
 	env := buildEnvironment()
 
 	const funcString = "(define fib (lambda (a b max) (if (= 0 max) b (fib b (+ a b) (- max 1)))))"
-	
+
 	f, err := parser.Parse(strings.NewReader(funcString))
 	if err != nil {
 		t.Error("Parsing funcString failed:", err)
 	}
-	
+
 	if _, err := Eval(env, f); err != nil {
 		t.Error("Evaluating funcString failed:", err)
 	}
 
 	const funcString2 = "(fib 0 1 10)"
-	
+
 	f, _ = parser.Parse(strings.NewReader(funcString2))
 	if a, err := Eval(env, f); err != nil {
 		t.Error("Evaluating", funcString2, "failed:", err)

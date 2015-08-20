@@ -1,9 +1,9 @@
 package types
 
 import (
-	"fmt"
 	"bytes"
 	"errors"
+	"fmt"
 )
 
 type Pair struct {
@@ -84,10 +84,10 @@ func (p *Pair) String() string {
 	b.WriteString(fmt.Sprintf("(%s", handleNull(p.car)))
 
 	isPair := true
-	
-	for i := 0 ; i < 10 && isPair ; i++ {
-		if p, isPair = p.cdr.(*Pair) ; isPair {
-			b.WriteString(fmt.Sprintf(" %s", handleNull(p.car)))			
+
+	for i := 0; i < 10 && isPair; i++ {
+		if p, isPair = p.cdr.(*Pair); isPair {
+			b.WriteString(fmt.Sprintf(" %s", handleNull(p.car)))
 		}
 	}
 

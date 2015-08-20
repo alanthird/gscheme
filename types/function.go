@@ -6,8 +6,8 @@ import (
 
 type SFunction struct {
 	Function SchemeType
-	Args *Pair
-	Env interface{}
+	Args     *Pair
+	Env      interface{}
 }
 
 func (f *SFunction) String() string {
@@ -22,8 +22,6 @@ func IsSFunction(f SchemeType) (ok bool) {
 	_, ok = f.(*SFunction)
 	return
 }
-
-
 
 type Builtin struct {
 	Fn func(interface{}, SchemeType) (SchemeType, error)

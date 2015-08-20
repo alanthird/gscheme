@@ -1,9 +1,9 @@
 package parser
 
 import (
+	"github.com/alanthird/gscheme/types"
 	"strings"
 	"testing"
-	"github.com/alanthird/gscheme/types"
 )
 
 func TestParser(t *testing.T) {
