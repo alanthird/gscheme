@@ -17,7 +17,7 @@ func (e *parseError) Error() string {
 	return fmt.Sprintf("PARSE ERROR: %s: %s", e.message, e.token)
 }
 
-func list(t *tokenizer) (types.SchemeType, error) {
+func list(t *tokenizer) (types.Type, error) {
 	car, listEnd, err := parseToken(t)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func list(t *tokenizer) (types.SchemeType, error) {
 	return types.Cons(car, cdr), nil
 }
 
-func parseToken(t *tokenizer) (types.SchemeType, bool, error) {
+func parseToken(t *tokenizer) (types.Type, bool, error) {
 	var token string
 	var err error
 
@@ -88,7 +88,7 @@ func parseToken(t *tokenizer) (types.SchemeType, bool, error) {
 	return nil, false, &parseError{"Unknown type", token}
 }
 
-func Parse(t io.Reader) (types.SchemeType, error) {
+func Parse(t io.Reader) (types.Type, error) {
 	r, _, err := parseToken(newTokenizer(t))
 	return r, err
 }

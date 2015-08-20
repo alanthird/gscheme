@@ -1,14 +1,14 @@
 package types
 
-type SchemeType interface {
-	Eqv(SchemeType) bool
+type Type interface {
+	Eqv(Type) bool
 	String() string
 }
 
-func Eq(a, b SchemeType) bool {
+func Eq(a, b Type) bool {
 	return a == b
 }
 
-func Eqv(a, b SchemeType) bool {
+func Eqv(a, b Type) bool {
 	return a.Eqv(b)
 }

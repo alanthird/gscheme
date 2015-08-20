@@ -7,8 +7,8 @@ import (
 )
 
 func buildEnvironment() (env *e.Environment) {
-	var defFunc func(string, func(interface{}, t.SchemeType) (t.SchemeType, error))
-	defFunc = func(name string, fn func(interface{}, t.SchemeType) (t.SchemeType, error)) {
+	var defFunc func(string, func(interface{}, t.Type) (t.Type, error))
+	defFunc = func(name string, fn func(interface{}, t.Type) (t.Type, error)) {
 		e.Define(env, &t.Symbol{name}, &t.Builtin{fn})
 	}
 
@@ -33,9 +33,9 @@ func buildEnvironment() (env *e.Environment) {
 	return
 }
 
-func begin(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func begin(env interface{}, args t.Type) (t.Type, error) {
 	var (
-		result, expr t.SchemeType
+		result, expr t.Type
 		err          error
 	)
 
@@ -60,7 +60,7 @@ func begin(env interface{}, args t.SchemeType) (t.SchemeType, error) {
 // Pair Functions //
 ////////////////////
 
-func cons(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func cons(env interface{}, args t.Type) (t.Type, error) {
 	a, err := car(nil, args)
 	if err != nil {
 		return nil, err
@@ -74,11 +74,11 @@ func cons(env interface{}, args t.SchemeType) (t.SchemeType, error) {
 	return t.Cons(a, b), nil
 }
 
-func car(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func car(env interface{}, args t.Type) (t.Type, error) {
 	return t.Caar(args)
 }
 
-func cdr(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func cdr(env interface{}, args t.Type) (t.Type, error) {
 	return t.Cdar(args)
 }
 
@@ -86,7 +86,7 @@ func cdr(env interface{}, args t.SchemeType) (t.SchemeType, error) {
 // arithmetical functions //
 ////////////////////////////
 
-func add(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func add(env interface{}, args t.Type) (t.Type, error) {
 	var total int64 = 0
 
 	for ; args != nil; args, _ = t.Cdr(args) {
@@ -101,7 +101,7 @@ func add(env interface{}, args t.SchemeType) (t.SchemeType, error) {
 	return &t.Number{total}, nil
 }
 
-func sub(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func sub(env interface{}, args t.Type) (t.Type, error) {
 	arg, _ := t.Car(args)
 	n, ok := arg.(*t.Number)
 	if !ok {
@@ -122,7 +122,7 @@ func sub(env interface{}, args t.SchemeType) (t.SchemeType, error) {
 	return &t.Number{total}, nil
 }
 
-func equal_Number(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func equal_Number(env interface{}, args t.Type) (t.Type, error) {
 	arg, _ := t.Car(args)
 	first, ok := arg.(*t.Number)
 	if !ok {
@@ -141,7 +141,7 @@ func equal_Number(env interface{}, args t.SchemeType) (t.SchemeType, error) {
 
 /* General Functions */
 
-func eqv(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func eqv(env interface{}, args t.Type) (t.Type, error) {
 	first, _ := t.Car(args)
 
 	for args, _ := t.Cdr(args); args != nil; args, _ = t.Cdr(args) {
@@ -154,7 +154,7 @@ func eqv(env interface{}, args t.SchemeType) (t.SchemeType, error) {
 	return &t.Bool{true}, nil
 }
 
-func eq(env interface{}, args t.SchemeType) (t.SchemeType, error) {
+func eq(env interface{}, args t.Type) (t.Type, error) {
 	first, _ := t.Car(args)
 
 	for args, _ := t.Cdr(args); args != nil; args, _ = t.Cdr(args) {

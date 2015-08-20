@@ -11,7 +11,7 @@ func (b *Bool) String() string {
 	return "#f"
 }
 
-func (b1 *Bool) Eqv(b2 SchemeType) bool {
+func (b1 *Bool) Eqv(b2 Type) bool {
 	b, ok := b2.(*Bool)
 	if ok {
 		return b1.Value == b.Value
@@ -20,7 +20,7 @@ func (b1 *Bool) Eqv(b2 SchemeType) bool {
 	}
 }
 
-func IsBool(b SchemeType) (ok bool) {
+func IsBool(b Type) (ok bool) {
 	_, ok = b.(*Bool)
 	return
 }

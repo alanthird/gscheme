@@ -10,7 +10,7 @@ func (s *String) String() string {
 	return fmt.Sprintf("\"%s\"", string(s.Value))
 }
 
-func (s1 *String) Eqv(s2 SchemeType) bool {
+func (s1 *String) Eqv(s2 Type) bool {
 	s, ok := s2.(*String)
 	if ok {
 		return s1.Value == s.Value
@@ -19,7 +19,7 @@ func (s1 *String) Eqv(s2 SchemeType) bool {
 	}
 }
 
-func IsString(s SchemeType) (ok bool) {
+func IsString(s Type) (ok bool) {
 	_, ok = s.(*String)
 	return
 }

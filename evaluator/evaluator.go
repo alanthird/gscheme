@@ -6,7 +6,7 @@ import (
 	"github.com/alanthird/gscheme/types"
 )
 
-func Eval(env *environment.Environment, f types.SchemeType) (types.SchemeType, error) {
+func Eval(env *environment.Environment, f types.Type) (types.Type, error) {
 	if types.IsPair(f) {
 		car, err := types.Car(f)
 		if err != nil {
@@ -33,7 +33,7 @@ func Eval(env *environment.Environment, f types.SchemeType) (types.SchemeType, e
 	return f, nil
 }
 
-func Apply(env *environment.Environment, f types.SchemeType, args types.SchemeType) (types.SchemeType, error) {
+func Apply(env *environment.Environment, f types.Type, args types.Type) (types.Type, error) {
 	if isSpecialForm(f) {
 		return applySpecialForm(env, f.(*types.Symbol).Value, args)
 	}
@@ -74,7 +74,7 @@ func Apply(env *environment.Environment, f types.SchemeType, args types.SchemeTy
 	return nil, fmt.Errorf("APPLY: Unknown function: %s", f.(*types.Symbol).Value)
 }
 
-func evalArgs(env *environment.Environment, args types.SchemeType) (types.SchemeType, error) {
+func evalArgs(env *environment.Environment, args types.Type) (types.Type, error) {
 	if args == nil {
 		return nil, nil
 	}
@@ -102,7 +102,7 @@ func evalArgs(env *environment.Environment, args types.SchemeType) (types.Scheme
 	return types.Cons(car, cdr), nil
 }
 
-func listToArray(env *environment.Environment, list *types.Pair) (argList []types.SchemeType, err error) {
+func listToArray(env *environment.Environment, list *types.Pair) (argList []types.Type, err error) {
 	for a := list; a != nil; {
 		car, err := types.Car(a)
 		if err != nil {

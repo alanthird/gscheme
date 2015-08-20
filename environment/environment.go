@@ -26,11 +26,11 @@ func New(parent *Environment) *Environment {
 	return &Environment{nil, parent}
 }
 
-func Define(env *Environment, sym *types.Symbol, item types.SchemeType) {
+func Define(env *Environment, sym *types.Symbol, item types.Type) {
 	env.env = types.Cons(types.Cons(sym, item), env.env)
 }
 
-func Get(env *Environment, sym *types.Symbol) (types.SchemeType, error) {
+func Get(env *Environment, sym *types.Symbol) (types.Type, error) {
 	for e := env; e != nil; e = e.parent {
 		for v := e.env; v != nil; {
 			testSym, err := types.Caar(v)
@@ -59,8 +59,8 @@ func Get(env *Environment, sym *types.Symbol) (types.SchemeType, error) {
 	return nil, &envError{m: fmt.Sprintf("Unknown variable: %s", sym.Value)}
 }
 
-func AddArgs(env *Environment, argNames, args types.SchemeType) (err error) {
-	var nameP, valueP, name, value types.SchemeType
+func AddArgs(env *Environment, argNames, args types.Type) (err error) {
+	var nameP, valueP, name, value types.Type
 
 	for nameP, valueP = argNames, args; nameP != nil && valueP != nil; {
 		name, err = types.Car(nameP)

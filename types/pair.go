@@ -7,15 +7,15 @@ import (
 )
 
 type Pair struct {
-	car SchemeType
-	cdr SchemeType
+	car Type
+	cdr Type
 }
 
-func Cons(a, b SchemeType) *Pair {
+func Cons(a, b Type) *Pair {
 	return &Pair{a, b}
 }
 
-func Car(p SchemeType) (SchemeType, error) {
+func Car(p Type) (Type, error) {
 	pair, ok := p.(*Pair)
 	if ok {
 		return pair.car, nil
@@ -23,7 +23,7 @@ func Car(p SchemeType) (SchemeType, error) {
 	return nil, errors.New(fmt.Sprintf("Car: Not pair: %s", p))
 }
 
-func Cdr(p SchemeType) (SchemeType, error) {
+func Cdr(p Type) (Type, error) {
 	pair, ok := p.(*Pair)
 	if ok {
 		return pair.cdr, nil
@@ -31,7 +31,7 @@ func Cdr(p SchemeType) (SchemeType, error) {
 	return nil, errors.New(fmt.Sprintf("Cdr: Not pair: %s", p))
 }
 
-func Caar(p SchemeType) (SchemeType, error) {
+func Caar(p Type) (Type, error) {
 	p1, err := Car(p)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func Caar(p SchemeType) (SchemeType, error) {
 	return Car(p1)
 }
 
-func Cddr(p SchemeType) (SchemeType, error) {
+func Cddr(p Type) (Type, error) {
 	p1, err := Cdr(p)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func Cddr(p SchemeType) (SchemeType, error) {
 	return Cdr(p1)
 }
 
-func Cdar(p SchemeType) (SchemeType, error) {
+func Cdar(p Type) (Type, error) {
 	p1, err := Car(p)
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func Cdar(p SchemeType) (SchemeType, error) {
 	return Cdr(p1)
 }
 
-func Cadr(p SchemeType) (SchemeType, error) {
+func Cadr(p Type) (Type, error) {
 	p1, err := Cdr(p)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func Cadr(p SchemeType) (SchemeType, error) {
 	return Car(p1)
 }
 
-func (p1 *Pair) Eqv(p2 SchemeType) bool {
+func (p1 *Pair) Eqv(p2 Type) bool {
 	p, ok := p2.(*Pair)
 	if ok {
 		return p1.car == p.car && p1.cdr == p.cdr
@@ -72,7 +72,7 @@ func (p1 *Pair) Eqv(p2 SchemeType) bool {
 	}
 }
 
-func handleNull(t SchemeType) string {
+func handleNull(t Type) string {
 	if t == nil {
 		return "#nil"
 	}
@@ -100,7 +100,7 @@ func (p *Pair) String() string {
 	return b.String()
 }
 
-func IsPair(p SchemeType) (ok bool) {
+func IsPair(p Type) (ok bool) {
 	_, ok = p.(*Pair)
 	return
 }
