@@ -14,7 +14,7 @@ func TestEval(t *testing.T) {
 	environment.Define(env, &types.Symbol{"everything"}, &types.Number{42})
 	environment.Define(env, &types.Symbol{"cows"}, &types.String{"moo"})
 	environment.Define(env, &types.Symbol{"sheep"}, &types.String{"baa"})
-	environment.Define(env, &types.Symbol{"+"}, &types.Builtin{types.Add})
+	environment.Define(env, &types.Symbol{"+"}, &types.Builtin{add})
 
 	if r, _ := Eval(env, &types.Symbol{"everything"}); !types.Eqv(r, &types.Number{42}) {
 		t.Error("Var 'everything' != 42: ", r)
@@ -40,7 +40,7 @@ func TestBegin(t *testing.T) {
 
 	environment.Define(env, &types.Symbol{"cows"}, &types.String{"moo"})
 	environment.Define(env, &types.Symbol{"sheep"}, &types.String{"baa"})
-	environment.Define(env, &types.Symbol{"begin"}, &types.Builtin{Begin})
+	environment.Define(env, &types.Symbol{"begin"}, &types.Builtin{begin})
 
 	f, _ := parser.Parse(strings.NewReader("(begin cows sheep)"))
 	if r, err := Eval(env, f); err != nil {
@@ -76,11 +76,29 @@ func TestQuote(t *testing.T) {
 	}
 }
 
+func TestIf(t *testing.T) {
+	env := environment.New(nil)
+
+	f, _ := parser.Parse(strings.NewReader("(if #t 'yes 'no)"))
+	if a, err := Eval(env, f); err != nil {
+		t.Error("Evaluating (if #t 'yes 'no) failed:", err)
+	} else if !types.Eqv(a, &types.Symbol{"yes"}) {
+		t.Error("result != yes", a)
+	}
+
+	f, _ = parser.Parse(strings.NewReader("(if #f 'yes 'no)"))
+	if a, err := Eval(env, f); err != nil {
+		t.Error("Evaluating (if #f 'yes 'no) failed:", err)
+	} else if !types.Eqv(a, &types.Symbol{"no"}) {
+		t.Error("result != no", a)
+	}
+}
+
 func TestLambda(t *testing.T) {
 	env := environment.New(nil)
 
-	environment.Define(env, &types.Symbol{"+"}, &types.Builtin{types.Add})
-	environment.Define(env, &types.Symbol{"begin"}, &types.Builtin{Begin})
+	environment.Define(env, &types.Symbol{"+"}, &types.Builtin{add})
+	environment.Define(env, &types.Symbol{"begin"}, &types.Builtin{begin})
 
 	f, _ := parser.Parse(strings.NewReader("(lambda (n) n)"))
 	if a, err := Eval(env, f); err != nil {
@@ -111,8 +129,8 @@ func TestLambda(t *testing.T) {
 func TestScoping(t *testing.T) {
 	env := environment.New(nil)
 
-	environment.Define(env, &types.Symbol{"begin"}, &types.Builtin{Begin})
-	environment.Define(env, &types.Symbol{"+"}, &types.Builtin{types.Add})
+	environment.Define(env, &types.Symbol{"begin"}, &types.Builtin{begin})
+	environment.Define(env, &types.Symbol{"+"}, &types.Builtin{add})
 
 	funcString := "(begin (define a 0) (define get-num ((lambda (a b) (define c 4) (lambda (b) (+ a b c))) 1 2)))"
 	
@@ -137,5 +155,29 @@ func TestScoping(t *testing.T) {
 		t.Error("Evaluating (get-num) failed:", err)
 	} else if !types.Eqv(a, &types.Number{13}) {
 		t.Error("(get-num 8) != 13:", a)
+	}
+}
+
+func TestFibonacci(t *testing.T) {
+	env := buildEnvironment()
+
+	const funcString = "(define fib (lambda (a b max) (if (= 0 max) b (fib b (+ a b) (- max 1)))))"
+	
+	f, err := parser.Parse(strings.NewReader(funcString))
+	if err != nil {
+		t.Error("Parsing funcString failed:", err)
+	}
+	
+	if _, err := Eval(env, f); err != nil {
+		t.Error("Evaluating funcString failed:", err)
+	}
+
+	const funcString2 = "(fib 0 1 10)"
+	
+	f, _ = parser.Parse(strings.NewReader(funcString2))
+	if a, err := Eval(env, f); err != nil {
+		t.Error("Evaluating", funcString2, "failed:", err)
+	} else if !types.Eqv(a, &types.Number{89}) {
+		t.Error(funcString2, "!= 89", a)
 	}
 }

@@ -39,3 +39,7 @@ func isDoubleQuote(c rune) bool {
 func isFullStop(c rune) bool {
 	return c == '.'
 }
+
+func isHash(c rune) bool {
+	return c == '#'
+}

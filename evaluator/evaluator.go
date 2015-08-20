@@ -65,7 +65,7 @@ func Apply(env *environment.Environment, f types.SchemeType, args types.SchemeTy
 			return nil, err
 		}
 
-		if r, err := Begin(sfnEnv, sfn.Function) ; err != nil {
+		if r, err := begin(sfnEnv, sfn.Function) ; err != nil {
 			return nil, fmt.Errorf("%s\nAPPLY: function %s", err, f.(*types.Symbol).Value)
 		} else {
 			return r, nil
@@ -100,29 +100,6 @@ func evalArgs(env *environment.Environment, args types.SchemeType) (types.Scheme
 	}
 
 	return types.Cons(car, cdr), nil
-}
-
-func Begin(env interface{}, args types.SchemeType) (types.SchemeType, error) {
-	var (
-		result, expr types.SchemeType
-		err error
-	)
-	
-	for ; args != nil ; args, _ = types.Cdr(args) {
-		expr, err = types.Car(args)
-		if err != nil {
-			return nil, err
-		}
-
-		//fmt.Printf("%s\n", expr)
-		
-		result, err = Eval(env.(*environment.Environment), expr)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return result, nil
 }
 
 func listToArray(env *environment.Environment, list *types.Pair) (argList []types.SchemeType, err error) {

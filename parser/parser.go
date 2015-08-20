@@ -78,6 +78,13 @@ func parseToken(t *tokenizer) (types.SchemeType, bool, error) {
 		return &types.Number{n}, false, nil
 	}
 
+	switch token {
+	case "#t": 
+		return &types.Bool{true}, false, nil
+	case "#f":
+		return &types.Bool{false}, false, nil
+	}
+
 	return nil, false, &parseError{"Unknown type", token}
 }
 
@@ -88,7 +95,7 @@ func Parse(t io.Reader) (types.SchemeType, error) {
 
 func isSymbol(t string) bool {
 	c, _ := utf8.DecodeRuneInString(t)
-	return !isParen(c) && !isNumber(c) && !isDoubleQuote(c)
+	return !isParen(c) && !isNumber(c) && !isDoubleQuote(c) && !isHash(c)
 }
 
 func isString(t string) bool {

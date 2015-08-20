@@ -9,7 +9,7 @@ import (
 func isSpecialForm(o types.SchemeType) bool {
 	if f, ok := o.(*types.Symbol); ok {
 		switch f.Value {
-		case "define", "quote", "lambda":
+		case "define", "quote", "lambda", "if":
 			return true
 		}
 	}
@@ -24,6 +24,8 @@ func applySpecialForm(env *environment.Environment, name string, args types.Sche
 		return nil, define(env, args)
 	case "lambda":
 		return lambda(env, args)
+	case "if":
+		return if_s(env, args)
 	}
 	return nil, nil
 }
@@ -59,4 +61,30 @@ func lambda(env *environment.Environment, a types.SchemeType) (types.SchemeType,
 	}
 
 	return &types.SFunction{text, args.(*types.Pair), env}, nil
+}
+
+func if_s(env *environment.Environment, a types.SchemeType) (types.SchemeType, error) {
+	test, err := types.Car(a)
+	if err != nil {
+		return nil, err
+	}
+
+	b, err := Eval(env, test)
+	if err != nil {
+		return nil, err
+	}
+
+	var toEval types.SchemeType
+	
+	if b.(*types.Bool).Value {
+		toEval, err = types.Cadr(a)
+		if err != nil { return nil, err }
+	} else {
+		temp, err := types.Cdr(a)
+		if err != nil { return nil, err }
+		toEval, err = types.Cadr(temp)
+		if err != nil { return nil, err }
+	}
+
+	return Eval(env, toEval)
 }

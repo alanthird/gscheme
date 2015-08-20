@@ -24,17 +24,3 @@ func IsNumber(n SchemeType) (ok bool) {
 	return
 }
 
-func Add(env interface{}, args SchemeType) (SchemeType, error) {
-	var total int64 = 0
-
-	for ; args != nil; args, _ = Cdr(args){
-		arg, _ := Car(args)
-		n, ok := arg.(*Number)
-		if !ok {
-			return nil, fmt.Errorf("ADD: Not a number: %s", arg)
-		}
-		
-		total = total + n.Value
-	}
-	return &Number{total}, nil
-}

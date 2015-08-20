@@ -69,10 +69,6 @@ func TestNumber(t *testing.T) {
 	if IsNumber(&String{"Moo!"}) {
 		t.Error("isNumber gives true with String")
 	}
-
-	if n, _ := Add(&Number{1}, &Number{1}); !Eqv(n, &Number{2}) {
-		t.Error("Add 1 and 1 != 2: ", n)
-	}
 }
 
 func TestString(t *testing.T) {
