@@ -159,7 +159,7 @@ func TestScoping(t *testing.T) {
 }
 
 func TestFibonacci(t *testing.T) {
-	env := buildEnvironment()
+	env := BuildEnvironment()
 
 	const funcString = "(define fib (lambda (a b max) (if (= 0 max) b (fib b (+ a b) (- max 1)))))"
 

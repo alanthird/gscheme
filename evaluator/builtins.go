@@ -6,7 +6,7 @@ import (
 	t "github.com/alanthird/gscheme/types"
 )
 
-func buildEnvironment() (env *e.Environment) {
+func BuildEnvironment() (env *e.Environment) {
 	var defFunc func(string, func(interface{}, t.Type) (t.Type, error))
 	defFunc = func(name string, fn func(interface{}, t.Type) (t.Type, error)) {
 		e.Define(env, &t.Symbol{name}, &t.Builtin{fn})
