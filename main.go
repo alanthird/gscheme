@@ -25,13 +25,13 @@ func main() {
 
 		f, err := parser.Parse(strings.NewReader(l))
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "%s\n", err)
+			fmt.Fprintln(os.Stderr, "%s", err)
 			readline.AddHistory(l)
 		}
 
 		r, err := evaluator.Eval(env, f)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "%s\n", err)
+			fmt.Fprintln(os.Stderr, "%s", err)
 		} else {
 			fmt.Println(r)
 		}
