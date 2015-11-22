@@ -60,7 +60,7 @@ func lambda(env *environment.Environment, a types.Type) (types.Type, error) {
 		return nil, fmt.Errorf("%s\nLAMBDA: unable to get function body: %s", err, a)
 	}
 
-	return &types.SFunction{text, args.(*types.Pair), env}, nil
+	return &types.SFunction{text, args, env}, nil
 }
 
 func if_s(env *environment.Environment, a types.Type) (types.Type, error) {

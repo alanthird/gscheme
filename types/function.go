@@ -6,7 +6,7 @@ import (
 
 type SFunction struct {
 	Function Type
-	Args     *Pair
+	Args     Type
 	Env      interface{}
 }
 
