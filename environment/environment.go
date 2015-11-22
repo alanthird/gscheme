@@ -14,7 +14,7 @@ func (e *envError) Error() string {
 	if e.e != nil {
 		return fmt.Sprintf("%s\nENV: %s", e.e, e.m)
 	}
-	return fmt.Sprintf("ENV: %s", e.e, e.m)
+	return fmt.Sprintf("ENV: %s", e.m)
 }
 
 type Environment struct {
