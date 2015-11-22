@@ -18,12 +18,7 @@ func Eval(env *environment.Environment, f types.Type) (types.Type, error) {
 			return nil, err
 		}
 
-		cdrAgain, ok := cdr.(*types.Pair)
-		if !ok {
-			return nil, fmt.Errorf("EVAL: Not pair: %s", cdr)
-		}
-
-		return Apply(env, car, cdrAgain)
+		return Apply(env, car, cdr)
 	}
 
 	if types.IsSymbol(f) {
